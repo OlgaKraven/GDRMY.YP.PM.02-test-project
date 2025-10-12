@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Вход — Театр</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="logo">Театр</a>
+            <ul class="nav-list">
+                <li><a aria-current="page" href="index.htm">Билеты</a></li>
+                <li><a href="reports.htm">Отчётность</a></li>
+                <li><a href="admin.htm">Админ</a></li>
+                <li><a href="login.htm">Вход</a></li>
+                <li><a href="register.htm">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" role="main">
+        <h1>Вход</h1>
+        <p class="muted">Введите логин и пароль. При ошибке покажем уведомление ниже.</p>
+
+        <!-- Сообщение от сервера (успех/ошибка). Снимите hidden на сервере при необходимости -->
+        <div class="flash error" role="alert" aria-live="polite" id="flash" hidden>
+            Неверный логин или пароль. Попробуйте ещё раз.
+        </div>
+
+        <form class="card form" method="post" action="/login" novalidate>
+            <!-- Логин -->
+            <div class="form-row">
+                <label for="login">Логин</label>
+                <input id="login" name="login" type="text" autocomplete="username" required minlength="6" maxlength="64"
+                    pattern="^[A-Za-z0-9]{6,}$" title="Только латиница и цифры, не менее 6 символов." />
+            </div>
+
+            <!-- Пароль -->
+            <div class="form-row">
+                <label for="password">Пароль</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required
+                    minlength="8" maxlength="128" title="Пароль не менее 8 символов." />
+            </div>
+
+            <!-- Доп.параметры -->
+            <div class="form-row">
+                <label class="checkbox">
+                    <input type="checkbox" name="remember" value="1">
+                    <span>Запомнить меня на этом устройстве</span>
+                </label>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Войти</button>
+                <a class="btn link" href="/register.html">Создать аккаунт</a>
+            </div>
+
+            <!-- Технические поля (подставит сервер) -->
+            <input type="hidden" name="csrf_token" value="[[to-be-filled-by-server]]" />
+        </form>
+
+        <noscript>
+            <p class="muted">JavaScript не обязателен: проверка логина/пароля будет на сервере.</p>
+        </noscript>
+    </main>
+
+    <footer class="site-footer">
+        <small>© Театр, 2025</small>
+    </footer>
+</body>
+
+</html>

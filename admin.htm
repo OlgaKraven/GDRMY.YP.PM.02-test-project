@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Админ-панель — Театр</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="logo">Театр</a>
+            <ul class="nav-list">
+                <li><a aria-current="page" href="index.htm">Билеты</a></li>
+                <li><a href="reports.htm">Отчётность</a></li>
+                <li><a href="admin.htm">Админ</a></li>
+                <li><a href="login.htm">Вход</a></li>
+                <li><a href="register.htm">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" role="main">
+        <h1>Панель администратора</h1>
+        <p class="muted">Доступ к изменению настроек ограничен правами <code>settings.edit</code> и ролью
+            <code>admin</code>.</p>
+
+        <!-- 1. Настройки безопасности -->
+        <section class="card">
+            <h2>Безопасность</h2>
+            <form method="post" action="/admin/security" class="grid-2">
+                <div class="form-row">
+                    <label for="min_length">Минимальная длина пароля</label>
+                    <input id="min_length" name="min_length" type="number" min="6" max="64" value="8" required>
+                </div>
+                <div class="form-row">
+                    <label class="checkbox">
+                        <input type="checkbox" name="require_digits" checked>
+                        <span>Требовать цифры</span>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label class="checkbox">
+                        <input type="checkbox" name="require_upper">
+                        <span>Требовать заглавные буквы</span>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label for="lock_threshold">Блокировка после N неудачных входов</label>
+                    <input id="lock_threshold" name="lock_threshold" type="number" min="3" max="20" value="5" required>
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Сохранить политику</button>
+                </div>
+                <input type="hidden" name="csrf_token" value="[[csrf]]">
+            </form>
+            <p class="muted">Значения сохраняются в <code>admin_setting.svalue</code> для ключа
+                <code>security.password_policy</code>.</p>
+        </section>
+
+        <!-- 2. Интеграции -->
+        <section class="card">
+            <h2>Интеграции</h2>
+
+            <!-- Список интеграций -->
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Тип</th>
+                            <th>Название</th>
+                            <th>Активна</th>
+                            <th>Создано</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Сервер подставит реальные данные -->
+                        <tr>
+                            <td>1</td>
+                            <td>email</td>
+                            <td>SMTP (Mail.example)</td>
+                            <td><span class="badge ok">Да</span></td>
+                            <td>2025-10-01</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>payment</td>
+                            <td>OnlinePay</td>
+                            <td><span class="badge warn">Нет</span></td>
+                            <td>2025-10-02</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Форма добавления/редактирования -->
+            <form method="post" action="/admin/integration/save" class="grid-2" style="margin-top:1rem">
+                <div class="form-row">
+                    <label for="int_type">Тип</label>
+                    <select id="int_type" name="type" required>
+                        <option value="">Выберите</option>
+                        <option value="payment">Платёж</option>
+                        <option value="email">E-mail</option>
+                        <option value="marketing">Маркетинг</option>
+                        <option value="analytics">Аналитика</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="int_name">Название</label>
+                    <input id="int_name" name="name" type="text" required maxlength="100"
+                        placeholder="Напр. SMTP / OnlinePay">
+                </div>
+                <div class="form-row">
+                    <label for="int_config">Конфигурация (JSON)</label>
+                    <textarea id="int_config" name="config" rows="6"
+                        placeholder='{"host":"smtp.example.com","port":587,"user":"...","pass":"..."}'
+                        required></textarea>
+                </div>
+                <div class="form-row">
+                    <label class="checkbox">
+                        <input type="checkbox" name="is_active">
+                        <span>Активировать</span>
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Сохранить интеграцию</button>
+                    <a class="btn link" href="/admin/integration/test">Тест отправки/платежа</a>
+                </div>
+                <input type="hidden" name="integration_id" value="">
+                <input type="hidden" name="csrf_token" value="[[csrf]]">
+            </form>
+            <p class="muted">Хранение: таблица <code>integration</code>, поле <code>config</code> — JSON-строка.</p>
+        </section>
+
+        <!-- 3. Резервное копирование -->
+        <section class="card">
+            <h2>Резервное копирование</h2>
+            <form method="post" action="/admin/backup/settings" class="grid-2">
+                <div class="form-row">
+                    <label class="checkbox">
+                        <input type="checkbox" name="backup_enabled" checked>
+                        <span>Включить автокопирование</span>
+                    </label>
+                </div>
+                <div class="form-row">
+                    <label for="retention">Хранение копий (дней)</label>
+                    <input id="retention" name="retention_days" type="number" min="1" max="365" value="14" required>
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Сохранить настройки</button>
+                    <a class="btn link" href="/admin/backup/run">Создать бэкап сейчас</a>
+                </div>
+                <input type="hidden" name="csrf_token" value="[[csrf]]">
+            </form>
+
+            <h3 style="margin-top:1.25rem">Журнал бэкапов</h3>
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Начало</th>
+                            <th>Окончание</th>
+                            <th>Статус</th>
+                            <th>Файл</th>
+                            <th>Сообщение</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>58</td>
+                            <td>2025-10-09 03:00</td>
+                            <td>2025-10-09 03:02</td>
+                            <td><span class="badge ok">success</span></td>
+                            <td>/backups/theatre-2025-10-09.sql.gz</td>
+                            <td>Ок</td>
+                        </tr>
+                        <tr>
+                            <td>59</td>
+                            <td>2025-10-10 03:00</td>
+                            <td>2025-10-10 03:01</td>
+                            <td><span class="badge err">failed</span></td>
+                            <td>-</td>
+                            <td>Недостаточно места</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="muted">Хранение: таблица <code>backup_log</code>. Кнопка «Создать бэкап» добавляет запись
+                <code>started</code>, затем обновляет <code>finished_at</code>/статус.</p>
+        </section>
+
+        <!-- 4. Пользователи и роли -->
+        <section class="card">
+            <h2>Пользователи и роли</h2>
+
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Логин</th>
+                            <th>ФИО</th>
+                            <th>Роль</th>
+                            <th>Активен</th>
+                            <th>E-mail</th>
+                            <th>Телефон</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>7</td>
+                            <td>admin123</td>
+                            <td>Системный Администратор</td>
+                            <td>admin</td>
+                            <td><span class="badge ok">Да</span></td>
+                            <td>admin@example.com</td>
+                            <td>8(999)000-00-00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <form method="post" action="/admin/users/update" class="grid-3" style="margin-top:1rem">
+                <div class="form-row">
+                    <label for="u_login">Логин</label>
+                    <input id="u_login" name="login" type="text" required pattern="^[A-Za-z0-9]{6,}$">
+                </div>
+                <div class="form-row">
+                    <label for="u_role">Роль</label>
+                    <select id="u_role" name="role_id" required>
+                        <option value="">Выберите</option>
+                        <option value="1">admin</option>
+                        <option value="2">cashier</option>
+                        <option value="3">user</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label class="checkbox">
+                        <input type="checkbox" name="is_active" checked>
+                        <span>Активен</span>
+                    </label>
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Сохранить</button>
+                </div>
+                <input type="hidden" name="user_id" value="">
+                <input type="hidden" name="csrf_token" value="[[csrf]]">
+            </form>
+
+            <h3 style="margin-top:1.25rem">Права ролей</h3>
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Роль</th>
+                            <th>Право</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>admin</td>
+                            <td>tickets.manage</td>
+                        </tr>
+                        <tr>
+                            <td>admin</td>
+                            <td>reports.view</td>
+                        </tr>
+                        <tr>
+                            <td>admin</td>
+                            <td>settings.edit</td>
+                        </tr>
+                        <tr>
+                            <td>admin</td>
+                            <td>users.manage</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <form method="post" action="/admin/roles/assign" class="grid-3" style="margin-top:1rem">
+                <div class="form-row">
+                    <label for="r_role">Роль</label>
+                    <select id="r_role" name="role_id" required>
+                        <option value="">Выберите</option>
+                        <option value="1">admin</option>
+                        <option value="2">cashier</option>
+                        <option value="3">user</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="r_perm">Право</label>
+                    <select id="r_perm" name="permission_id" required>
+                        <option value="">Выберите</option>
+                        <option value="101">tickets.manage</option>
+                        <option value="102">reports.view</option>
+                        <option value="103">settings.edit</option>
+                        <option value="104">users.manage</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Назначить право</button>
+                </div>
+                <input type="hidden" name="csrf_token" value="[[csrf]]">
+            </form>
+        </section>
+
+        <!-- 5. Системные журналы -->
+        <section class="card">
+            <h2>Журналы авторизации</h2>
+            <form method="get" action="/admin/authlog" class="grid-3">
+                <div class="form-row">
+                    <label for="q_login">Логин</label>
+                    <input id="q_login" name="login" type="text" placeholder="filter...">
+                </div>
+                <div class="form-row">
+                    <label for="q_from">С</label>
+                    <input id="q_from" name="from" type="datetime-local">
+                </div>
+                <div class="form-row">
+                    <label for="q_to">По</label>
+                    <input id="q_to" name="to" type="datetime-local">
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Показать</button>
+                </div>
+            </form>
+
+            <div class="table-scroll" style="margin-top:1rem">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Логин</th>
+                            <th>IP</th>
+                            <th>User-Agent</th>
+                            <th>Успех</th>
+                            <th>Причина</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-10-10 09:10</td>
+                            <td>admin123</td>
+                            <td>127.0.0.1</td>
+                            <td>Chrome</td>
+                            <td><span class="badge ok">Да</span></td>
+                            <td>—</td>
+                        </tr>
+                        <tr>
+                            <td>2025-10-10 09:12</td>
+                            <td>user2025</td>
+                            <td>127.0.0.1</td>
+                            <td>Chrome</td>
+                            <td><span class="badge err">Нет</span></td>
+                            <td>bad_password</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="muted">Источник: таблица <code>auth_log</code>.</p>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <small>© Театр, 2025</small>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,347 @@
+/* =============== */
+/*  Базовые стили  */
+/* =============== */
+:root {
+--bg-color: #1b1b1b;
+--text-color: #f4f4f4;
+--accent: #d4af37;      /* золотой акцент */
+--accent-hover: #f1d45e;
+--danger: #c23b22;
+--muted: #999;
+--card-bg: #2a2a2a;
+--input-bg: #3a3a3a;
+--border-color: #444;
+--radius: 8px;
+--transition: 0.25s ease;
+--max-width: 600px;
+font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+html, body {
+height: 100%;
+margin: 0;
+background-color: var(--bg-color);
+color: var(--text-color);
+line-height: 1.5;
+}
+
+h1, h2, h3, h4, h5 {
+font-weight: 600;
+color: var(--accent);
+margin-top: 0;
+}
+
+a {
+color: var(--accent);
+text-decoration: none;
+transition: color var(--transition);
+}
+a:hover { color: var(--accent-hover); }
+
+/* Контейнер */
+.container {
+max-width: var(--max-width);
+margin: 2rem auto;
+padding: 1.5rem;
+}
+
+/* =============== */
+/*     Навигация   */
+/* =============== */
+.site-header {
+background-color: #111;
+border-bottom: 1px solid var(--border-color);
+}
+.nav {
+display: flex;
+justify-content: space-between;
+align-items: center;
+max-width: var(--max-width);
+margin: 0 auto;
+padding: 0.5rem 1rem;
+}
+.nav .logo {
+font-size: 1.4rem;
+font-weight: bold;
+color: var(--accent);
+}
+.nav-list {
+list-style: none;
+display: flex;
+gap: 1rem;
+padding: 0;
+margin: 0;
+}
+.nav-list a {
+padding: 0.25rem 0.5rem;
+border-radius: var(--radius);
+}
+.nav-list a[aria-current="page"] {
+background-color: var(--accent);
+color: #000;
+}
+
+/* =============== */
+/*     Карточки    */
+/* =============== */
+.card {
+background-color: var(--card-bg);
+border: 1px solid var(--border-color);
+border-radius: var(--radius);
+padding: 1.5rem;
+box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+/* =============== */
+/*       Формы     */
+/* =============== */
+.form-row {
+display: flex;
+flex-direction: column;
+margin-bottom: 1rem;
+}
+
+label {
+font-weight: 600;
+margin-bottom: 0.25rem;
+}
+
+input, select, textarea {
+background-color: var(--input-bg);
+border: 1px solid var(--border-color);
+border-radius: var(--radius);
+color: var(--text-color);
+padding: 0.6rem;
+font-size: 1rem;
+transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+input:focus, select:focus, textarea:focus {
+outline: none;
+border-color: var(--accent);
+box-shadow: 0 0 0 3px rgba(212,175,55,0.25);
+}
+
+small.help {
+font-size: 0.85rem;
+color: var(--muted);
+margin-top: 0.25rem;
+}
+
+/* чекбокс */
+.checkbox {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+.checkbox input[type="checkbox"] {
+width: 1.1rem;
+height: 1.1rem;
+}
+
+/* Кнопки */
+.btn {
+display: inline-block;
+text-align: center;
+border-radius: var(--radius);
+font-weight: 600;
+cursor: pointer;
+transition: background-color var(--transition), color var(--transition);
+}
+
+.btn.primary {
+background-color: var(--accent);
+color: #000;
+padding: 0.6rem 1.2rem;
+border: none;
+}
+.btn.primary:hover { background-color: var(--accent-hover); }
+
+.btn.link {
+background: none;
+border: none;
+color: var(--accent);
+text-decoration: underline;
+}
+.btn.link:hover { color: var(--accent-hover); }
+
+.form-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 1rem;
+margin-top: 1.5rem;
+}
+
+/* Уведомления */
+.flash {
+border-radius: var(--radius);
+padding: 0.75rem 1rem;
+margin-bottom: 1rem;
+background-color: #303030;
+border-left: 4px solid var(--accent);
+}
+.flash.error {
+border-left-color: var(--danger);
+color: #ffb3a5;
+}
+.flash.success {
+border-left-color: #4caf50;
+color: #c8ffc8;
+}
+
+/* Подвал */
+.site-footer {
+text-align: center;
+color: var(--muted);
+padding: 2rem 0;
+border-top: 1px solid var(--border-color);
+}
+
+/* =============== */
+/*  Мелкие детали  */
+/* =============== */
+.muted { color: var(--muted); }
+code {
+background: #333;
+color: #f1d45e;
+padding: 2px 4px;
+border-radius: 4px;
+}
+
+/* Адаптив */
+@media (max-width: 344px) {
+.nav { flex-direction: column; gap: 0.5rem; }
+.container { padding: 1rem; }
+.form-actions { flex-direction: column; }
+.btn { width: 100%; }
+}
+/* ====== Схема зала ====== */
+.hall-grid {
+display: flex;
+flex-direction: column;
+align-items: center;
+margin: 1.5rem 0;
+gap: 0.5rem;
+}
+
+.row {
+display: flex;
+align-items: center;
+gap: 0.5rem;
+}
+
+.row-label {
+width: 60px;
+text-align: right;
+color: var(--muted);
+font-size: 0.9rem;
+}
+
+.seat {
+width: 36px;
+height: 36px;
+border-radius: 50%;
+border: 2px solid var(--accent);
+background-color: transparent;
+color: var(--accent);
+font-weight: 600;
+cursor: pointer;
+transition: background-color 0.25s ease;
+}
+
+.seat.free:hover {
+background-color: var(--accent);
+color: #000;
+}
+
+.seat.reserved {
+background-color: #555;
+color: #ccc;
+border-color: #555;
+cursor: not-allowed;
+}
+
+.seat.sold {
+background-color: #a00;
+color: #fff;
+border-color: #a00;
+cursor: not-allowed;
+}
+
+/* ====== Таблицы и метрики ====== */
+.table-scroll {
+overflow-x: auto;
+}
+
+.table {
+width: 100%;
+border-collapse: collapse;
+background: var(--card-bg);
+border: 1px solid var(--border-color);
+border-radius: var(--radius);
+}
+
+.table th, .table td {
+padding: 0.6rem 0.75rem;
+border-bottom: 1px solid var(--border-color);
+text-align: left;
+white-space: nowrap;
+}
+
+.table thead th {
+position: sticky;
+top: 0;
+background: #242424;
+z-index: 1;
+color: var(--accent);
+}
+
+.table tfoot td {
+background: #242424;
+}
+
+.table .num { text-align: right; }
+.table .right { text-align: right; }
+
+/* Бэйджи */
+.badge {
+display: inline-block;
+padding: 0.15rem 0.45rem;
+border-radius: 999px;
+font-size: 0.85rem;
+font-weight: 700;
+background: #555;
+color: #fff;
+}
+.badge.ok { background: #2e7d32; }
+.badge.warn { background: #a35f00; }
+.badge.err { background: #a00000; }
+
+/* Полоска заполнения */
+.meter {
+display: inline-block;
+width: 120px;
+height: 10px;
+background: #444;
+border-radius: 6px;
+vertical-align: middle;
+margin-right: 0.5rem;
+overflow: hidden;
+border: 1px solid #555;
+}
+.meter > span {
+display: block;
+height: 100%;
+background: linear-gradient(90deg, #5b8f1a, var(--accent));
+}
+/* ====== Сетки для форм админки ====== */
+.grid-2, .grid-3 {
+display: grid;
+gap: 1rem 1.25rem;
+}
+.grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 800px) {
+.grid-2, .grid-3 { grid-template-columns: 1fr; }
+}
+

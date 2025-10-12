@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Бронирование и продажа билетов — Театр</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="logo">Театр</a>
+            <ul class="nav-list">
+                <li><a aria-current="page" href="index.htm">Билеты</a></li>
+                <li><a href="reports.htm">Отчётность</a></li>
+                <li><a href="admin.htm">Админ</a></li>
+                <li><a href="login.htm">Вход</a></li>
+                <li><a href="register.htm">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" role="main">
+        <h1>Бронирование и продажа билетов</h1>
+        <p class="muted">Выберите спектакль и дату, затем место в зале.</p>
+
+        <!-- Блок выбора спектакля -->
+        <section class="card">
+            <h2>Репертуар</h2>
+            <form method="get" action="/performances">
+                <div class="form-row">
+                    <label for="production">Спектакль</label>
+                    <select id="production" name="production_id" required>
+                        <option value="">Выберите спектакль</option>
+                        <option value="1">Щелкунчик (Балет)</option>
+                        <option value="2">Лебединое озеро</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label for="date">Дата</label>
+                    <select id="date" name="date" required>
+                        <option value="">Выберите дату</option>
+                        <option value="2025-12-20">20 декабря 2025 — 19:00</option>
+                        <option value="2025-12-21">21 декабря 2025 — 19:00</option>
+                    </select>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">Показать зал</button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Блок схемы зала -->
+        <section class="card" aria-labelledby="hall-title">
+            <h2 id="hall-title">Схема зала — Большой зал</h2>
+            <p class="muted">Выберите свободное место.</p>
+
+            <div class="hall-grid">
+                <!-- Пример 3 ряда × 5 мест -->
+                <div class="row">
+                    <span class="row-label">Ряд 1</span>
+                    <button class="seat free" title="Место 1" type="button">1</button>
+                    <button class="seat reserved" disabled title="Место 2 (занято)">2</button>
+                    <button class="seat free" title="Место 3">3</button>
+                    <button class="seat sold" disabled title="Место 4 (продано)">4</button>
+                    <button class="seat free" title="Место 5">5</button>
+                </div>
+
+                <div class="row">
+                    <span class="row-label">Ряд 2</span>
+                    <button class="seat free" title="Место 1">1</button>
+                    <button class="seat free" title="Место 2">2</button>
+                    <button class="seat reserved" disabled title="Место 3 (занято)">3</button>
+                    <button class="seat free" title="Место 4">4</button>
+                    <button class="seat free" title="Место 5">5</button>
+                </div>
+
+                <div class="row">
+                    <span class="row-label">Ряд 3</span>
+                    <button class="seat free" title="Место 1">1</button>
+                    <button class="seat sold" disabled title="Место 2 (продано)">2</button>
+                    <button class="seat free" title="Место 3">3</button>
+                    <button class="seat free" title="Место 4">4</button>
+                    <button class="seat free" title="Место 5">5</button>
+                </div>
+            </div>
+            <p class="muted">Свободные — золотые, Занятые — серые, Проданные — красные.</p>
+        </section>
+
+        <!-- Блок оплаты -->
+        <section class="card">
+            <h2>Оформление билета</h2>
+            <form method="post" action="/order">
+                <div class="form-row">
+                    <label for="selected-seats">Выбранные места</label>
+                    <input id="selected-seats" name="selected_seats" type="text" readonly value="1 ряд, место 3" />
+                </div>
+
+                <div class="form-row">
+                    <label for="payment">Способ оплаты</label>
+                    <select id="payment" name="payment_method" required>
+                        <option value="">Выберите способ оплаты</option>
+                        <option value="cash">Наличные</option>
+                        <option value="card">Банковская карта</option>
+                        <option value="online">Онлайн-платёж</option>
+                    </select>
+                </div>
+
+                <div class="form-row">
+                    <label for="email">E-mail для подтверждения</label>
+                    <input id="email" name="email" type="email" required placeholder="example@mail.ru">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn primary">Оформить билет</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <small>© Театр, 2025</small>
+    </footer>
+</body>
+
+</html>

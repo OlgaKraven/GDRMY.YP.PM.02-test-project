@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Отчётность — Театр</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="logo">Театр</a>
+            <ul class="nav-list">
+                <li><a aria-current="page" href="index.htm">Билеты</a></li>
+                <li><a href="reports.htm">Отчётность</a></li>
+                <li><a href="admin.htm">Админ</a></li>
+                <li><a href="login.htm">Вход</a></li>
+                <li><a href="register.htm">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" role="main">
+        <h1>Учёт продаж и отчётность</h1>
+        <p class="muted">Фильтры применяются на стороне сервера при отправке формы.</p>
+
+        <!-- Фильтры -->
+        <section class="card">
+            <h2>Фильтр данных</h2>
+            <form method="get" action="/reports">
+                <div class="form-row">
+                    <label for="from">Период с</label>
+                    <input id="from" name="from" type="date" required>
+                </div>
+                <div class="form-row">
+                    <label for="to">по</label>
+                    <input id="to" name="to" type="date" required>
+                </div>
+                <div class="form-row">
+                    <label for="production">Спектакль</label>
+                    <select id="production" name="production_id">
+                        <option value="">Все спектакли</option>
+                        <option value="1">Щелкунчик</option>
+                        <option value="2">Лебединое озеро</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="btn primary" type="submit">Применить</button>
+                    <a class="btn link" href="/reports.html">Сбросить</a>
+                </div>
+            </form>
+        </section>
+
+        <!-- Продажи по сеансам -->
+        <section class="card">
+            <h2>Продажи по сеансам</h2>
+            <p class="muted">Источник: представление <code>v_sales_by_performance</code>.</p>
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Сеанс</th>
+                            <th>Спектакль</th>
+                            <th>Зал</th>
+                            <th>Дата/время</th>
+                            <th>Продано</th>
+                            <th>Возврат</th>
+                            <th>Всего билетов</th>
+                            <th>Выручка, ₽</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Пример строк; сервер подставит реальные -->
+                        <tr>
+                            <td>#1025</td>
+                            <td>Щелкунчик</td>
+                            <td>Большой зал</td>
+                            <td>2025-12-20 19:00</td>
+                            <td><span class="badge ok">11</span></td>
+                            <td><span class="badge warn">1</span></td>
+                            <td>15</td>
+                            <td class="num">18 450.00</td>
+                        </tr>
+                        <tr>
+                            <td>#1026</td>
+                            <td>Лебединое озеро</td>
+                            <td>Большой зал</td>
+                            <td>2025-12-21 19:00</td>
+                            <td><span class="badge ok">9</span></td>
+                            <td><span class="badge warn">0</span></td>
+                            <td>15</td>
+                            <td class="num">14 700.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="4" class="right">Итого по выборке:</td>
+                            <td><strong>20</strong></td>
+                            <td><strong>1</strong></td>
+                            <td><strong>30</strong></td>
+                            <td class="num"><strong>33 150.00</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </section>
+
+        <!-- Заполняемость залов -->
+        <section class="card">
+            <h2>Заполняемость залов</h2>
+            <p class="muted">Источник: представление <code>v_occupancy</code>.</p>
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Сеанс</th>
+                            <th>Спектакль</th>
+                            <th>Дата/время</th>
+                            <th>Выдано мест</th>
+                            <th>Продано</th>
+                            <th>Бронь</th>
+                            <th>Заполняемость</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>#1025</td>
+                            <td>Щелкунчик</td>
+                            <td>2025-12-20 19:00</td>
+                            <td>15</td>
+                            <td>11</td>
+                            <td>2</td>
+                            <td><span class="meter"><span style="width:73%"></span></span> 73%</td>
+                        </tr>
+                        <tr>
+                            <td>#1026</td>
+                            <td>Лебединое озеро</td>
+                            <td>2025-12-21 19:00</td>
+                            <td>15</td>
+                            <td>9</td>
+                            <td>3</td>
+                            <td><span class="meter"><span style="width:60%"></span></span> 60%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Динамика выручки по дням -->
+        <section class="card">
+            <h2>Динамика выручки по дням</h2>
+            <p class="muted">Источник: представление <code>v_revenue_daily</code>.</p>
+            <div class="table-scroll">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Дата</th>
+                            <th>Выручка, ₽</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-12-20</td>
+                            <td class="num">18 450.00</td>
+                        </tr>
+                        <tr>
+                            <td>2025-12-21</td>
+                            <td class="num">14 700.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td class="right">Итого за период:</td>
+                            <td class="num"><strong>33 150.00</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <!-- Экспорт (кнопки — ссылки на серверные маршруты) -->
+            <div class="form-actions">
+                <a class="btn primary" href="/reports/export/csv">Экспорт CSV</a>
+                <a class="btn link" href="/reports/export/xlsx">Экспорт XLSX</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <small>© Театр, 2025</small>
+    </footer>
+</body>
+
+</html>

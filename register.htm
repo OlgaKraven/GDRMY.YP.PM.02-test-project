@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Регистрация — Театр</title>
+    <!-- Замените на ваш файл стилей -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <nav class="nav">
+            <a href="/" class="logo">Театр</a>
+            <ul class="nav-list">
+                <li><a aria-current="page" href="index.htm">Билеты</a></li>
+                <li><a href="reports.htm">Отчётность</a></li>
+                <li><a href="admin.htm">Админ</a></li>
+                <li><a href="login.htm">Вход</a></li>
+                <li><a href="register.htm">Регистрация</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container" role="main">
+        <h1>Регистрация</h1>
+        <p class="muted">Все поля обязательны для заполнения.</p>
+
+        <!-- Сообщения об ошибках/успехе (заполним сервером позже) -->
+        <div class="flash" role="alert" aria-live="polite" id="flash-area" hidden></div>
+
+        <form class="card form" method="post" action="/register" novalidate>
+            <!-- Логин -->
+            <div class="form-row">
+                <label for="login">Логин</label>
+                <input id="login" name="login" type="text" inputmode="latin" autocomplete="username" required
+                    pattern="^[A-Za-z0-9]{6,}$" minlength="6" maxlength="64"
+                    title="Только латиница и цифры, не менее 6 символов." aria-describedby="login-help" />
+                <small id="login-help" class="help">
+                    Пример: <code>user2025</code>. Только латиница и цифры, ≥6 символов.
+                </small>
+            </div>
+
+            <!-- Пароль -->
+            <div class="form-row">
+                <label for="password">Пароль</label>
+                <input id="password" name="password" type="password" autocomplete="new-password" required minlength="8"
+                    maxlength="128" title="Пароль не менее 8 символов." aria-describedby="password-help" />
+                <small id="password-help" class="help">
+                    Минимум 8 символов. (Проверку сложности добавим на сервере.)
+                </small>
+            </div>
+
+            <!-- ФИО -->
+            <div class="form-row">
+                <label for="full_name">ФИО</label>
+                <input id="full_name" name="full_name" type="text" required maxlength="200"
+                    pattern="^[A-Za-zА-Яа-яЁё\- ]{5,}$" title="Только буквы, пробел и дефис. Не короче 5 символов."
+                    aria-describedby="fio-help" />
+                <small id="fio-help" class="help">
+                    Разрешены буквы (рус/лат), пробел, дефис.
+                </small>
+            </div>
+
+            <!-- Телефон -->
+            <div class="form-row">
+                <label for="phone">Телефон</label>
+                <input id="phone" name="phone" type="tel" inputmode="numeric" required placeholder="8(999)123-45-67"
+                    pattern="^8\([0-9]{3}\)[0-9]{3}-[0-9]{2}-[0-9]{2}$" title="Формат: 8(XXX)XXX-XX-XX"
+                    aria-describedby="phone-help" />
+                <small id="phone-help" class="help">
+                    Формат: <code>8(XXX)XXX-XX-XX</code>
+                </small>
+            </div>
+
+            <!-- Email -->
+            <div class="form-row">
+                <label for="email">E-mail</label>
+                <input id="email" name="email" type="email" autocomplete="email" required maxlength="255"
+                    title="Укажите корректный адрес электронной почты." />
+            </div>
+
+            <!-- Согласие -->
+            <div class="form-row">
+                <label class="checkbox">
+                    <input type="checkbox" name="terms" required />
+                    <span>Я принимаю условия обработки персональных данных</span>
+                </label>
+            </div>
+
+            <!-- Кнопки -->
+            <div class="form-actions">
+                <button type="submit" class="btn primary">Создать аккаунт</button>
+                <a class="btn link" href="/login.html">У меня уже есть аккаунт</a>
+            </div>
+
+            <!-- Технические поля (для сервера, если понадобится) -->
+            <input type="hidden" name="csrf_token" value="[[to-be-filled-by-server]]" />
+        </form>
+
+        <noscript>
+            <p class="muted">JavaScript не обязателен для регистрации. Валидация выполняется на сервере.</p>
+        </noscript>
+    </main>
+
+    <footer class="site-footer">
+        <small>© Театр, 2025</small>
+    </footer>
+</body>
+
+</html>
